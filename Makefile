@@ -2,7 +2,7 @@
 # Makefile for the security policy.
 #
 # Targets:
-# 
+#
 # install       - compile and install the policy configuration, and context files.
 # load          - compile, install, and load the policy configuration.
 # reload        - compile, install, and load/reload the policy configuration.
@@ -233,7 +233,7 @@ ifeq ($(DISTRO),debian)
 endif
 
 ifeq ($(DISTRO),gentoo)
-	CTAGS := exuberant-ctags	
+	CTAGS := exuberant-ctags
 endif
 
 CTAGS ?= ctags
@@ -312,8 +312,8 @@ off_mods += $(filter-out $(base_mods) $(mod_mods) $(off_mods),$(notdir $(detecte
 standalone_ifs := $(filter-out $(subst .te,.if, $(base_mods) $(mod_mods) $(off_mods)), $(notdir $(detected_ifs)))
 
 # filesystems to be used in labeling targets
-filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | awk '/(ext[234]|btrfs| xfs| jfs).*rw/{print $$3}';)
-fs_names := "btrfs ext2 ext3 ext4 xfs jfs"
+filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | awk '/(ext[234]|bcachefs|btrfs| xfs| jfs).*rw/{print $$3}';)
+fs_names := "bcachefs btrfs ext2 ext3 ext4 xfs jfs"
 
 ########################################
 #
@@ -408,7 +408,7 @@ $(layerxml): %.xml: $(all_metaxml) $(filter $(addprefix $(moddir)/, $(notdir $*)
 	$(verbose) for i in $(basename $(filter $(addprefix $(moddir)/, $(notdir $*))%, $(detected_mods))); do $(genxml) -w -m $$i >> $@; done
 ifdef LOCAL_ROOT
 	$(verbose) for i in $(basename $(filter $(addprefix $(local_moddir)/, $(notdir $*))%, $(detected_mods))); do $(genxml) -w -m $$i >> $@; done
-endif	
+endif
 
 $(tunxml): $(globaltun)
 	$(verbose) $(genxml) -w -t $< > $@
