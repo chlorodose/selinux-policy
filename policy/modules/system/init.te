@@ -118,6 +118,23 @@ files_pid_file(init_var_run_t)
 type init_var_lib_t;
 files_type(init_var_lib_t)
 
+attribute init_credential_type;
+type init_cred_enc_t;
+files_config_file(init_cred_enc_t)
+typeattribute init_cred_enc_t init_credential_type;
+type init_cred_plain_t;
+files_config_file(init_cred_plain_t)
+typeattribute init_cred_plain_t init_credential_type;
+type init_cred_enc_var_run_t;
+files_pid_file(init_cred_enc_var_run_t)
+typeattribute init_cred_enc_var_run_t init_credential_type;
+type init_cred_plain_var_run_t;
+files_pid_file(init_cred_plain_var_run_t)
+typeattribute init_cred_plain_var_run_t init_credential_type;
+
+type init_cred_t;
+files_pid_file(init_cred_t)
+
 type machineid_t;
 files_config_file(machineid_t)
 
@@ -974,6 +991,16 @@ setattr_dirs_pattern(initrc_t, daemonrundir, daemonrundir)
 
 domtrans_pattern(init_run_all_scripts_domain, initrc_exec_t, initrc_t)
 
+list_dirs_pattern(init_t, init_credential_type, init_credential_type)
+read_files_pattern(init_t, init_credential_type, init_credential_type)
+mmap_read_files_pattern(init_t, init_credential_type, init_credential_type)
+read_lnk_files_pattern(init_t, init_credential_type, init_credential_type)
+read_sock_files_pattern(init_t, init_credential_type, init_credential_type)
+
+filetrans_pattern(init_t, var_run_t, init_cred_t, dir, "credentials")
+manage_dirs_pattern(init_t, init_cred_t, init_cred_t)
+manage_files_pattern(init_t, init_cred_t, init_cred_t)
+manage_lnk_files_pattern(init_t, init_cred_t, init_cred_t)
 manage_dirs_pattern(initrc_t, initrc_state_t, initrc_state_t)
 manage_files_pattern(initrc_t, initrc_state_t, initrc_state_t)
 manage_lnk_files_pattern(initrc_t, initrc_state_t, initrc_state_t)

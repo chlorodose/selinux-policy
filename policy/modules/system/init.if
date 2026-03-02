@@ -1590,6 +1590,26 @@ interface(`init_getattr_script_files',`
 
 ########################################
 ## <summary>
+##	Read init credential files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`init_read_credential_files',`
+	gen_require(`
+		type init_cred_t;
+	')
+
+	list_dirs_pattern($1, init_cred_t, init_cred_t)
+    read_files_pattern($1, init_cred_t, init_cred_t)
+    mmap_read_files_pattern($1, init_cred_t, init_cred_t)
+')
+
+########################################
+## <summary>
 ##	Read init scripts.
 ## </summary>
 ## <param name="domain">

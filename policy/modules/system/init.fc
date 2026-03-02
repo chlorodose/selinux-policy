@@ -17,6 +17,9 @@ ifdef(`distro_gentoo',`
 /etc/x11/startDM\.sh	--	gen_context(system_u:object_r:initrc_exec_t,s0)
 ')
 
+/etc/credstore(/.*)?  gen_context(system_u:object_r:init_cred_plain_t,s0)
+/etc/credstore\.encrypted(/.*)?  gen_context(system_u:object_r:init_cred_enc_t,s0)
+
 #
 # /dev
 #
@@ -58,6 +61,9 @@ ifdef(`distro_gentoo', `
 
 /usr/share/system-config-services/system-config-services-mechanism\.py  --	gen_context(system_u:object_r:initrc_exec_t,s0)
 
+/usr/lib/credstore(/.*)?  gen_context(system_u:object_r:init_cred_plain_t,s0)
+/usr/lib/credstore\.encrypted(/.*)?  gen_context(system_u:object_r:init_cred_enc_t,s0)
+
 #
 # /var
 #
@@ -90,3 +96,9 @@ ifdef(`distro_suse', `
 /run/sysconfig(/.*)?	gen_context(system_u:object_r:initrc_var_run_t,s0)
 ')
 /run/systemd(/.*)?		gen_context(system_u:object_r:init_var_run_t,s0)
+
+/run/credstore(/.*)?  gen_context(system_u:object_r:init_cred_plain_var_run_t,s0)
+/run/credstore\.encrypted(/.*)?  gen_context(system_u:object_r:init_cred_enc_var_run_t,s0)
+
+/run/credentials(/.*)?  -d  gen_context(system_u:object_r:init_cred_t,s0)
+/run/credentials/.*/.*   gen_context(system_u:object_r:init_cred_t,s0)
