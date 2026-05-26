@@ -66,12 +66,12 @@ manage_dirs_pattern(kanidm_unixd_t, kanidm_unixd_var_run_t, kanidm_unixd_var_run
 manage_sock_files_pattern(kanidm_unixd_t, kanidm_unixd_var_run_t, kanidm_unixd_var_run_t)
 files_pid_filetrans(kanidm_unixd_t, kanidm_unixd_var_run_t, { dir file sock_file })
 
-allow kanidm_unixd_t kanidm_conf_t:dir search;
-allow kanidm_unixd_t kanidm_conf_t:file { getattr open read };
-allow kanidm_unixd_t kanidm_unixd_var_cache_t:dir { add_name getattr open read remove_name search write };
-allow kanidm_unixd_t kanidm_unixd_var_cache_t:file { create unlink };
-allow kanidm_unixd_t kanidm_unixd_var_cache_t:file { getattr lock open read write };
-allow kanidm_unixd_t kanidm_unixd_var_cache_t:lnk_file { getattr read };
+allow kanidm_unixd_t kanidm_conf_t:dir list_dir_perms;
+allow kanidm_unixd_t kanidm_conf_t:file read_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_cache_t:dir manage_dir_perms;
+allow kanidm_unixd_t kanidm_unixd_var_cache_t:file manage_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_cache_t:file mmap_rw_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_cache_t:lnk_file manage_lnk_file_perms;
 
 # kanidm_unixd_tasks local policy
 #
@@ -88,11 +88,10 @@ seutil_read_file_contexts(kanidm_unixd_tasks_t)
 
 selinux_get_fs_mount(kanidm_unixd_tasks_t)
 
-allow kanidm_unixd_tasks_t kanidm_conf_t:dir search;
-allow kanidm_unixd_tasks_t kanidm_conf_t:file { getattr open read };
-allow kanidm_unixd_tasks_t kanidm_unixd_t:unix_stream_socket connectto;
-allow kanidm_unixd_tasks_t kanidm_unixd_var_run_t:dir search;
-allow kanidm_unixd_tasks_t kanidm_unixd_var_run_t:sock_file write;
+allow kanidm_unixd_tasks_t kanidm_conf_t:dir list_dir_perms;
+allow kanidm_unixd_tasks_t kanidm_conf_t:file read_file_perms;
+allow kanidm_unixd_tasks_t kanidm_unixd_var_run_t:dir list_dir_perms;
+stream_connect_pattern(kanidm_unixd_tasks_t, kanidm_unixd_var_run_t, kanidm_unixd_var_run_t, kanidm_unixd_t);
 allow kanidm_unixd_tasks_t self:capability { chown dac_override };
 allow kanidm_unixd_tasks_t self:process setfscreate;
 
@@ -109,14 +108,13 @@ kernel_read_proc_files(kanidm_sshkeys_t)
 libs_use_ld_so(kanidm_sshkeys_t)
 miscfiles_read_localization(kanidm_sshkeys_t)
 
-allow kanidm_sshkeys_t kanidm_conf_t:dir search;
-allow kanidm_sshkeys_t kanidm_conf_t:file { getattr open read };
+allow kanidm_sshkeys_t kanidm_conf_t:dir list_dir_perms;
+allow kanidm_sshkeys_t kanidm_conf_t:file read_file_perms;
 allow kanidm_sshkeys_t kanidm_sshkeys_exec_t:file { entrypoint execute map read };
-allow kanidm_sshkeys_t kanidm_unixd_t:unix_stream_socket connectto;
-allow kanidm_sshkeys_t kanidm_unixd_var_run_t:dir search;
-allow kanidm_sshkeys_t kanidm_unixd_var_run_t:sock_file { getattr write };
-allow kanidm_sshkeys_t self:dir search;
-allow kanidm_sshkeys_t self:file { getattr open read };
+allow kanidm_sshkeys_t kanidm_unixd_var_run_t:dir list_dir_perms;
+stream_connect_pattern(kanidm_sshkeys_t, kanidm_unixd_var_run_t, kanidm_unixd_var_run_t, kanidm_unixd_t);
+allow kanidm_sshkeys_t self:dir list_dir_perms;
+allow kanidm_sshkeys_t self:file read_file_perms;
 # FIXME neverallow
 #allow kanidm_sshkeys_t self:process getsched;
 allow kanidm_sshkeys_t self:unix_stream_socket { connect create getopt read write };
@@ -161,11 +159,11 @@ libs_use_ld_so(kanidm_sshkeys_direct_t)
 
 #============= kanidm_sshkeys_direct_t ==============
 
-allow kanidm_sshkeys_direct_t kanidm_conf_t:dir search;
-allow kanidm_sshkeys_direct_t kanidm_conf_t:file { getattr open read };
+allow kanidm_sshkeys_direct_t kanidm_conf_t:dir list_dir_perms;
+allow kanidm_sshkeys_direct_t kanidm_conf_t:file read_file_perms;
 allow kanidm_sshkeys_direct_t kanidm_sshkeys_direct_exec_t:file { entrypoint execute map read };
-allow kanidm_sshkeys_direct_t self:dir search;
-allow kanidm_sshkeys_direct_t self:file { getattr open read };
+allow kanidm_sshkeys_direct_t self:dir list_dir_perms;
+allow kanidm_sshkeys_direct_t self:file read_file_perms;
 # FIXME is a neverallow
 #allow kanidm_sshkeys_direct_t self:process { fork getsched };
 allow kanidm_sshkeys_direct_t self:unix_stream_socket { connect create getopt read write };
