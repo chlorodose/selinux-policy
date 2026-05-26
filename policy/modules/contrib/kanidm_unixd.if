@@ -81,6 +81,26 @@ interface(`kanidm_read_cache_files',`
 
 ########################################
 ## <summary>
+##      Read kanidm data files.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+#
+interface(`kanidm_read_lib_files',`
+        gen_require(`
+                type kanidm_unixd_var_lib_t;
+        ')
+
+        list_dirs_pattern($1, kanidm_unixd_var_lib_t, kanidm_unixd_var_lib_t)
+        read_files_pattern($1, kanidm_unixd_var_lib_t, kanidm_unixd_var_lib_t)
+        read_lnk_files_pattern($1, kanidm_unixd_var_lib_t, kanidm_unixd_var_lib_t)
+')
+
+########################################
+## <summary>
 ##      Connect to kanidm over a unix stream socket.
 ## </summary>
 ## <param name="domain">

@@ -20,6 +20,9 @@ files_pid_file(kanidm_unixd_var_run_t)
 type kanidm_unixd_var_cache_t;
 files_type(kanidm_unixd_var_cache_t)
 
+type kanidm_unixd_var_lib_t;
+files_type(kanidm_unixd_var_lib_t)
+
 type kanidm_unixd_exec_t;
 init_daemon_domain(kanidm_unixd_t, kanidm_unixd_exec_t)
 init_nnp_daemon_domain(kanidm_unixd_t, kanidm_unixd_exec_t)
@@ -72,6 +75,15 @@ allow kanidm_unixd_t kanidm_unixd_var_cache_t:dir manage_dir_perms;
 allow kanidm_unixd_t kanidm_unixd_var_cache_t:file manage_file_perms;
 allow kanidm_unixd_t kanidm_unixd_var_cache_t:file mmap_rw_file_perms;
 allow kanidm_unixd_t kanidm_unixd_var_cache_t:lnk_file manage_lnk_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_lib_t:dir manage_dir_perms;
+allow kanidm_unixd_t kanidm_unixd_var_lib_t:file manage_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_lib_t:file mmap_rw_file_perms;
+allow kanidm_unixd_t kanidm_unixd_var_lib_t:lnk_file manage_lnk_file_perms;
+
+allow kanidm_unixd_t self:unix_dgram_socket create_socket_perms;
+allow kanidm_unixd_t self:unix_dgram_socket sendto;
+
+kernel_dgram_send(kanidm_unixd_t)
 
 # kanidm_unixd_tasks local policy
 #
@@ -79,6 +91,9 @@ allow kanidm_unixd_t kanidm_unixd_var_cache_t:lnk_file manage_lnk_file_perms;
 # it needs many of these dac/mac permissions.
 
 auth_read_passwd_file(kanidm_unixd_tasks_t)
+auth_read_shadow(kanidm_unixd_tasks_t)
+files_watch_etc_dirs(kanidm_unixd_tasks_t)
+clock_read_adjtime(kanidm_unixd_tasks_t)
 files_manage_home_dir(kanidm_unixd_tasks_t)
 files_list_home(kanidm_unixd_tasks_t)
 userdom_manage_user_home_content_dirs(kanidm_unixd_tasks_t)
@@ -92,8 +107,19 @@ allow kanidm_unixd_tasks_t kanidm_conf_t:dir list_dir_perms;
 allow kanidm_unixd_tasks_t kanidm_conf_t:file read_file_perms;
 allow kanidm_unixd_tasks_t kanidm_unixd_var_run_t:dir list_dir_perms;
 stream_connect_pattern(kanidm_unixd_tasks_t, kanidm_unixd_var_run_t, kanidm_unixd_var_run_t, kanidm_unixd_t);
-allow kanidm_unixd_tasks_t self:capability { chown dac_override };
+allow kanidm_unixd_tasks_t self:capability { chown dac_read_search dac_override };
 allow kanidm_unixd_tasks_t self:process setfscreate;
+
+allow kanidm_unixd_tasks_t file_type:dir list_dir_perms;
+allow kanidm_unixd_tasks_t file_type:dir watch_dir_perms;
+allow kanidm_unixd_tasks_t file_type:lnk_file read_lnk_file_perms;
+allow kanidm_unixd_tasks_t file_type:lnk_file watch_lnk_file_perms;
+allow kanidm_unixd_tasks_t file_type:file watch_file_perms;
+
+allow kanidm_unixd_tasks_t self:unix_dgram_socket create_socket_perms;
+allow kanidm_unixd_tasks_t self:unix_dgram_socket sendto;
+
+kernel_dgram_send(kanidm_unixd_tasks_t)
 
 ########################################
 #

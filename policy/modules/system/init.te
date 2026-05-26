@@ -628,7 +628,7 @@ allow init_t self:unix_dgram_socket { create_socket_perms sendto };
 allow init_t self:process { setkeycreate setsockcreate setfscreate setrlimit setexec };
 allow init_t self:process { getcap setcap };
 allow init_t self:unix_stream_socket { create_stream_socket_perms connectto recvfrom };
-allow init_t self:netlink_kobject_uevent_socket create_socket_perms; 
+allow init_t self:netlink_kobject_uevent_socket create_socket_perms;
 allow init_t self:netlink_selinux_socket create_socket_perms;
 allow init_t self:unix_dgram_socket lock;
 # Until systemd is fixed
@@ -727,7 +727,7 @@ fs_list_all(init_t)
 fs_list_auto_mountpoints(init_t)
 fs_register_binary_executable_type(init_t)
 fs_relabel_tmpfs_sock_file(init_t)
-fs_rw_tmpfs_files(init_t)	
+fs_rw_tmpfs_files(init_t)
 fs_relabel_cgroup_dirs(init_t)
 fs_search_cgroup_dirs(init_t)
 # for network namespaces
@@ -908,6 +908,7 @@ optional_policy(`
 	kanidm_read_public_files(init_t)
 	kanidm_unixd_stream_connect(init_t)
 	kanidm_read_cache_files(init_t)
+	kanidm_read_lib_files(init_t)
 ')
 
 optional_policy(`
@@ -924,7 +925,7 @@ optional_policy(`
 	systemd_homed_dbus_chat(init_t)
 	systemd_homed_write_pipes(init_t)
 ')
-	
+
 optional_policy(`
 	systemd_filetrans_named_content(init_t)
     systemd_write_inhibit_pipes(init_t)
@@ -1450,7 +1451,7 @@ tunable_policy(`daemons_use_tty',`
 	term_dontaudit_use_all_ttys(daemon)
 	term_dontaudit_use_all_ptys(daemon)
  ')
- 
+
 # system-config-services causes avc messages that should be dontaudited
 tunable_policy(`daemons_dump_core',`
 	files_manage_root_files(daemon)
@@ -1462,7 +1463,7 @@ optional_policy(`
 	userdom_dontaudit_read_user_tmp_files(daemon)
 	userdom_dontaudit_write_user_tmp_files(daemon)
 ')
- 
+
 optional_policy(`
 	amavis_search_lib(initrc_t)
 	amavis_setattr_pid_files(initrc_t)
@@ -1822,7 +1823,7 @@ optional_policy(`
 
 	# Allow SELinux aware applications to request rpm_script_t execution
 	rpm_transition_script(initrc_t, system_r)
-	
+
 	optional_policy(`
 		rtkit_scheduled(initrc_t)
 	')
@@ -1868,7 +1869,7 @@ userdom_dontaudit_rw_stream(daemon)
 logging_inherit_append_all_logs(daemon)
 
 optional_policy(`
-	# sudo service restart causes this 
+	# sudo service restart causes this
 	unconfined_signull(daemon)
 ')
 
@@ -2066,7 +2067,7 @@ optional_policy(`
         rhcs_read_cluster_lib_files(daemon)
         rhcs_read_cluster_pid_files(daemon)
     ')
-    
+
  ')
 
 optional_policy(`
